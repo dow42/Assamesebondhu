@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="as">
+<head>
+  <meta charset="UTF-8">
+  <title>Post Something - AsomiyaBondhu</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h2>Post to AsomiyaBondhu</h2>
+  <input type="file" id="postImage"><br>
+  <textarea id="caption" placeholder="Write something..."></textarea><br>
+  <button onclick="uploadPost()">Upload Post</button>
+
+  <script src="firebase-config.js"></script>
+  <script>
+    function uploadPost() {
+      const file = document.getElementById('postImage').files[0];
+      const caption = document.getElementById('caption').value;
+
+      if (!file || !caption) {
+        alert('Please select an image and write a caption.');
+        return;
+      }
+
+      const storageRef = firebase.storage().ref('posts/' + file.name);
+      storageRef.put(file).then(snapshot => {
+        return snapshot.ref.getDownloadURL();
+      }).then(url => {
+        return firebase.firestore().collection('posts').add({
+          imageUrl: url,
+          caption: caption,
+          timestamp: new Date()
+        });
+      }).then(() => {
+        alert('Post uploaded successfully!');
+        document.getElementById('postImage').value = '';
+        document.getElementById('caption').value = '';
+      }).catch(error => {
+        alert('Error uploading post: ' + error.message);
+      });
+    }
+  </script>
+</body>
+</html>
