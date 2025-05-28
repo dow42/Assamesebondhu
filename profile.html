@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="as">
+<head>
+  <meta charset="UTF-8">
+  <title>AsomiyaBondhu - Profile</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h2>Upload Your Profile</h2>
+  <input type="file" id="profilePic"><br>
+  <input type="text" id="status" placeholder="Status"><br>
+  <button onclick="uploadProfile()">Upload</button>
+  <script src="firebase-config.js"></script>
+  <script>
+    function uploadProfile() {
+      const file = document.getElementById('profilePic').files[0];
+      const status = document.getElementById('status').value;
+      alert('Profile upload logic will go here');
+    }
+  </script>
+</body>
+</html>
