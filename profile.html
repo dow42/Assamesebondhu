@@ -3,20 +3,88 @@
 <head>
   <meta charset="UTF-8">
   <title>AsomiyaBondhu - Profile</title>
-  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #e6f0ff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 50px;
+    }
+    .profile-box {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    img {
+      border-radius: 50%;
+      width: 120px;
+      height: 120px;
+      margin-bottom: 10px;
+      object-fit: cover;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: red;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-  <h2>Upload Your Profile</h2>
-  <input type="file" id="profilePic"><br>
-  <input type="text" id="status" placeholder="Status"><br>
-  <button onclick="uploadProfile()">Upload</button>
-  <script src="firebase-config.js"></script>
+
+  <div class="profile-box">
+    <img id="profilePic" src="https://www.w3schools.com/howto/img_avatar.png" alt="Profile Picture" />
+    <h2 id="userEmail">ইমেইল লোড হৈছে...</h2>
+    <button onclick="logout()">Logout</button>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+  <!-- Firebase Config -->
   <script>
-    function uploadProfile() {
-      const file = document.getElementById('profilePic').files[0];
-      const status = document.getElementById('status').value;
-      alert('Profile upload logic will go here');
+    const firebaseConfig = {
+      apiKey: "AIzaSyDOe67QxfmFnzj7hVOFrYdaLKrvNMUawWU",
+      authDomain: "asomiyabondhu.firebaseapp.com",
+      projectId: "asomiyabondhu",
+      storageBucket: "asomiyabondhu.firebasestorage.app",
+      messagingSenderId: "413467477694",
+      appId: "1:413467477694:web:95a4689a196890188900ef",
+      measurementId: "G-MEJGJR9Y05"
+    };
+    firebase.initializeApp(firebaseConfig);
+  </script>
+
+  <!-- Profile Info Load -->
+  <script>
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        document.getElementById("userEmail").innerText = user.email;
+
+        // যদি ইউজাৰে প্ৰোফাইল ফটো set কৰি থয়
+        if (user.photoURL) {
+          document.getElementById("profilePic").src = user.photoURL;
+        }
+
+      } else {
+        window.location.href = "index.html"; // লগ ইন কৰা নাই, redirect
+      }
+    });
+
+    function logout() {
+      firebase.auth().signOut().then(() => {
+        window.location.href = "index.html";
+      });
     }
   </script>
+
 </body>
 </html>
