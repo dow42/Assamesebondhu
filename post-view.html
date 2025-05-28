@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="as">
+<head>
+  <meta charset="UTF-8">
+  <title>AsomiyaBondhu - Post Feed</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f2f9ff;
+      padding: 20px;
+    }
+    .post-box {
+      background: white;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+    .post-box img {
+      width: 100%;
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+    .email {
+      font-size: 14px;
+      color: #007bff;
+    }
+    .caption {
+      font-size: 16px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>📸 AsomiyaBondhu - Post Feed</h2>
+  <div id="postFeed"></div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <!-- Firebase Config -->
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDOe67QxfmFnzj7hVOFrYdaLKrvNMUawWU",
+      authDomain: "asomiyabondhu.firebaseapp.com",
+      projectId: "asomiyabondhu",
+      storageBucket: "asomiyabondhu.firebasestorage.app",
+      messagingSenderId: "413467477694",
+      appId: "1:413467477694:web:95a4689a196890188900ef",
+      measurementId: "G-MEJGJR9Y05"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const firestore = firebase.firestore();
+  </script>
+
+  <!-- Load Posts -->
+  <script>
+    const postFeed = document.getElementById("postFeed");
+
+    firestore.collection("posts")
+      .orderBy("createdAt", "desc")
+      .onSnapshot(snapshot => {
+        postFeed.innerHTML = ""; // Clear feed first
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          const postDiv = document.createElement("div");
+          postDiv.className = "post-box";
+          postDiv.innerHTML = `
+            <div class="email"></div>
+            <div class="caption"></div>
+            <img src="" alt="Post Image" />
+          `;
+          postFeed.appendChild(postDiv);
+        });
+      });
+  </script>
+
+</body>
+</html>
