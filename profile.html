@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="as">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AsomiyaBondhu - প্ৰফাইল</title>
+  <style>
+    body {
+      background: linear-gradient(to right, #e0f7fa, #fce4ec);
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px;
+    }
+    .container {
+      background-color: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
+    h2 {
+      color: #00695c;
+      margin-bottom: 20px;
+    }
+    input[type="file"] {
+      margin: 15px 0;
+      padding: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #00796b;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background-color: #004d40;
+    }
+    img {
+      margin-top: 20px;
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 3px solid #00796b;
+    }
+    .note {
+      font-size: 14px;
+      color: #555;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>প্ৰফাইল ফটো আপলোড কৰক</h2>
+    <input type="file" id="fileInput" accept="image/*">
+    <br>
+    <button id="uploadBtn">আপলোড কৰক</button>
+    <br>
+    <img id="profilePic" src="" alt="Profile Picture">
+    <p class="note">ফটো আপলোড কৰাৰ পিছত আপুনি ইয়াত চাব পাৰিব।</p>
+  </div>
+
+  <!-- Firebase JS SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDOe67QxfmFnzj7hVOFrYdaLKrvNMUawWU",
+      authDomain: "asomiyabondhu.firebaseapp.com",
+      projectId: "asomiyabondhu",
+      storageBucket: "asomiyabondhu.appspot.com",
+      messagingSenderId: "413467477694",
+      appId: "1:413467477694:web:d1d4d16d7a574eeb8900ef",
+      measurementId: "G-WS7FK2EL4K"
+    };
+
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const storage = firebase.storage();
+    const db = firebase.firestore();
+
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        loadProfilePic(user.uid);
+      } else {
+        alert("আপুনি লগ ইন কৰা নাই! অনুগ্ৰহ কৰি লগ ইন কৰক।");
+        // window.location.href = "login.html";
+      }
+    });
+
+    const fileInput = document.getElementById("fileInput");
+    const uploadBtn = document.getElementById("uploadBtn");
+    const profilePic = document.getElementById("profilePic");
+
+    uploadBtn.addEventListener("click", () => {
+      const file = fileInput.files[0];
+      const user = auth.currentUser;
+
+      if (!file || !user) {
+        alert("দয়া কৰি ছবি বাছনি কৰক আৰু লগ ইন হোৱা নিশ্চিত কৰক।");
+        return;
+      }
+
+      const ref = storage.ref("profilePics/" + user.uid + "/" + file.name);
+
+      ref.put(file).then(snapshot => {
+        return snapshot.ref.getDownloadURL();
+      }).then(url => {
+        profilePic.src = url;
+        return db.collection("users").doc(user.uid).set({
+          profilePicURL: url
+        }, { merge: true });
+      }).then(() => {
+        alert("আপোনাৰ প্ৰফাইল ফটো সফলতাৰে আপলোড কৰা হ’ল!");
+      }).catch(error => {
+        alert("ত্ৰুটি: " + error.message);
+      });
+    });
+
+    function loadProfilePic(uid) {
+      db.collection("users").doc(uid).get().then(doc => {
+        if (doc.exists && doc.data().profilePicURL) {
+          profilePic.src = doc.data().profilePicURL;
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>
