@@ -1,47 +1,89 @@
 <!DOCTYPE html>
 <html lang="as">
 <head>
-  <meta charset="UTF-8" />
-  <title>AsomiyaBondhu - Sign Up</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <title>AsomiyaBondhu - Signup</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #e6f0ff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 50px;
+    }
+    .signup-box {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input {
+      display: block;
+      margin-bottom: 15px;
+      width: 250px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      padding: 10px 20px;
+      background: #00b300;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    a {
+      margin-top: 10px;
+      display: block;
+    }
+  </style>
 </head>
 <body>
-  <h2>AsomiyaBondhu ত নতুন সদস্য হৈ যোগ দিয়ক</h2>
 
-  <form id="signup-form">
-    <input type="email" id="signup-email" placeholder="Email" required /><br />
-    <input type="password" id="signup-password" placeholder="Password" required /><br />
-    <button type="submit">Sign Up</button>
-  </form>
+  <div class="signup-box">
+    <h2>Create Account</h2>
+    <input type="email" id="email" placeholder="Email" />
+    <input type="password" id="password" placeholder="Password" />
+    <button onclick="signup()">Sign Up</button>
+    <a href="index.html">Already have an account? Login</a>
+  </div>
 
-  <p>অকাউণ্ট আছে? <a href="index.html">লগ ইন কৰক</a></p>
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 
-  <script src="firebase-config.js">const firebaseConfig = {
-  apiKey: "AIzaSyDOe67QxfmFnzj7hVOFrYdaLKrvNMUawWU",
-  authDomain: "asomiyabondhu.firebaseapp.com",
-  projectId: "asomiyabondhu",
-  storageBucket: "asomiyabondhu.firebasestorage.app",
-  messagingSenderId: "413467477694",
-  appId: "1:413467477694:web:95a4689a196890188900ef",
-  measurementId: "G-MEJGJR9Y05"
-};</script>
+  <!-- Firebase Configuration -->
   <script>
-    const signupForm = document.getElementById('signup-form');
-    signupForm.addEventListener('submit', function (e) {
-      e.preventDefault();
+    const firebaseConfig = {
+      apiKey: "AIzaSyDOe67QxfmFnzj7hVOFrYdaLKrvNMUawWU",
+      authDomain: "asomiyabondhu.firebaseapp.com",
+      projectId: "asomiyabondhu",
+      storageBucket: "asomiyabondhu.firebasestorage.app",
+      messagingSenderId: "413467477694",
+      appId: "1:413467477694:web:95a4689a196890188900ef",
+      measurementId: "G-MEJGJR9Y05"
+    };
+    firebase.initializeApp(firebaseConfig);
+  </script>
 
-      const email = document.getElementById('signup-email').value;
-      const password = document.getElementById('signup-password').value;
+  <!-- Signup Logic -->
+  <script>
+    function signup() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
 
       firebase.auth().createUserWithEmailAndPassword(email, password)
-        .then(() => {
-          alert('Sign up successful! অনুগ্ৰহ কৰি লগ ইন কৰক।');
-          window.location.href = 'index.html'; // সফল sign upৰ পিছত লগ ইন পৃষ্ঠালৈ যোৱা
+        .then((userCredential) => {
+          alert("Account created successfully!");
+          window.location.href = "profile.html";
         })
         .catch((error) => {
-          alert('Error: ' + error.message);
+          alert("Signup failed: " + error.message);
         });
-    });
+    }
   </script>
+
 </body>
 </html>
