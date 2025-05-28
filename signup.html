@@ -1,34 +1,37 @@
 <!DOCTYPE html>
 <html lang="as">
 <head>
-  <meta charset="UTF-8">
-  <title>Sign Up - AsomiyaBondhu</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <title>AsomiyaBondhu - Sign Up</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h2>AsomiyaBondhu ত যোগ দিয়ক</h2>
+  <h2>AsomiyaBondhu ত নতুন সদস্য হৈ যোগ দিয়ক</h2>
+
   <form id="signup-form">
-    <input type="email" id="signup-email" placeholder="Email"><br>
-    <input type="password" id="signup-password" placeholder="Password"><br>
+    <input type="email" id="signup-email" placeholder="Email" required /><br />
+    <input type="password" id="signup-password" placeholder="Password" required /><br />
     <button type="submit">Sign Up</button>
   </form>
 
-  <p>Already have an account? <a href="index.html">Log in</a></p>
+  <p>অকাউণ্ট আছে? <a href="index.html">লগ ইন কৰক</a></p>
 
   <script src="firebase-config.js"></script>
   <script>
-    document.getElementById('signup-form').addEventListener('submit', function(e) {
+    const signupForm = document.getElementById('signup-form');
+    signupForm.addEventListener('submit', function (e) {
       e.preventDefault();
+
       const email = document.getElementById('signup-email').value;
       const password = document.getElementById('signup-password').value;
 
       firebase.auth().createUserWithEmailAndPassword(email, password)
-        .then(userCredential => {
-          alert('Sign up successful! Please login now.');
-          window.location.href = "index.html";
+        .then(() => {
+          alert('Sign up successful! অনুগ্ৰহ কৰি লগ ইন কৰক।');
+          window.location.href = 'index.html'; // সফল sign upৰ পিছত লগ ইন পৃষ্ঠালৈ যোৱা
         })
-        .catch(error => {
-          alert("Error: " + error.message);
+        .catch((error) => {
+          alert('Error: ' + error.message);
         });
     });
   </script>
