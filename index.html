@@ -1,17 +1,39 @@
 <!DOCTYPE html>
 <html lang="as">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>AsomiyaBondhu - Login</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h2>Welcome to AsomiyaBondhu</h2>
+  <h2>AsomiyaBondhu ত লগ ইন কৰক</h2>
+
   <form id="login-form">
-    <input type="email" id="email" placeholder="Email"><br>
-    <input type="password" id="password" placeholder="Password"><br>
+    <input type="email" id="email" placeholder="Email" required /><br />
+    <input type="password" id="password" placeholder="Password" required /><br />
     <button type="submit">Login</button>
   </form>
+
+  <p>নতুন ব্যৱহাৰকাৰী? <a href="signup.html">অকাউণ্ট খুলক</a></p>
+
   <script src="firebase-config.js"></script>
+  <script>
+    const loginForm = document.getElementById('login-form');
+    loginForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      firebase.auth().signInWithEmailAndPassword(email, password)
+        .then(() => {
+          alert('Login successful!');
+          window.location.href = 'profile.html';  // লগ ইন সফল হ'লে profile পৃষ্ঠালৈ যোৱা
+        })
+        .catch((error) => {
+          alert('Login failed: ' + error.message);
+        });
+    });
+  </script>
 </body>
 </html>
