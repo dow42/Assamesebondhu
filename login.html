@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Login - AsomiyaBondhu</title>
+    <style>
+      body {
+        background-color: #f2f2f2;
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+      .login-box {
+        background-color: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        width: 300px;
+        text-align: center;
+      }
+      input {
+        width: 90%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      button {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+      .error { color: red; }
+      .success { color: green; }
+    </style>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"></script>
+  </head>
+  <body>
+    <div class="login-box">
+      <h2>লগ-ইন কৰক</h2>
+      <form id="login-form">
+        <input type="email" id="email" placeholder="ইমেইল" required><br>
+        <input type="password" id="password" placeholder="পাছৱৰ্ড" required><br>
+        <button type="submit">লগ-ইন</button>
+      </form>
+      <div id="message"></div>
+    </div>
+    <script>
+      
+const firebaseConfig = {
+  apiKey: "AIzaSyDOe67QxfmFnzj7hVOFrYdaLKrvNMUawWU",
+  authDomain: "asomiyabondhu.firebaseapp.com",
+  projectId: "asomiyabondhu",
+  storageBucket: "asomiyabondhu.firebasestorage.app",
+  messagingSenderId: "413467477694",
+  appId: "1:413467477694:web:d1d4d16d7a574eeb8900ef",
+  measurementId: "G-WS7FK2EL4K"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+
+      const loginForm = document.getElementById('login-form');
+      const messageDiv = document.getElementById('message');
+      loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        auth.signInWithEmailAndPassword(email, password)
+          .then((userCredential) => {
+            messageDiv.textContent = "লগ-ইন সফল হ'ল!";
+            messageDiv.className = "success";
+            loginForm.reset();
+            window.location.href = "dashboard.html";
+          })
+          .catch((error) => {
+            messageDiv.textContent = "ভুল: " + error.message;
+            messageDiv.className = "error";
+          });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Dashboard - AsomiyaBondhu</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 30px;
+        background-color: #f0fff0;
+      }
+      h1 {
+        color: #28a745;
+      }
+      button {
+        background-color: #dc3545;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+    </style>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"></script>
+  </head>
+  <body>
+    <h1>স্বাগতম, AsomiyaBondhu ত!</h1>
+    <p>আপুনি সফলতাৰে লগ-ইন কৰিছে।</p>
+    <button onclick="logout()">লগ-আউট</button>
+    <script>
+      
+const firebaseConfig = {
+  apiKey: "AIzaSyDOe67QxfmFnzj7hVOFrYdaLKrvNMUawWU",
+  authDomain: "asomiyabondhu.firebaseapp.com",
+  projectId: "asomiyabondhu",
+  storageBucket: "asomiyabondhu.firebasestorage.app",
+  messagingSenderId: "413467477694",
+  appId: "1:413467477694:web:d1d4d16d7a574eeb8900ef",
+  measurementId: "G-WS7FK2EL4K"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+
+      auth.onAuthStateChanged((user) => {
+        if (!user) {
+          window.location.href = "login.html";
+        }
+      });
+      function logout() {
+        auth.signOut().then(() => {
+          window.location.href = "login.html";
+        });
+      }
+    </script>
+  </body>
+</html>
